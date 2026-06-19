@@ -52,14 +52,14 @@ const SignUp = ({ show, handleClose }) => {
   try {
     const formData = new FormData();
     formData.append("pnumber", mobileNumber);
-    const response = await fetch("https://api.erp4dentist.com/checkphone", {
+    const response = await fetch("https://api.erp4dentist.com/api/checkphone", {
       method: "POST",
       body: formData,
     });
 
     const result = await response.json();
 
-    if (result === "1") {
+    if (result.data === "1") {
       toast.error("Mobile Number Already Registered.");
       setLoading(false);
       return;
@@ -76,7 +76,7 @@ const SignUp = ({ show, handleClose }) => {
     sendOtpFormData.append("phone", mobileNumber);
     sendOtpFormData.append("otp", otpValue);
 
-    const gallaboxRes = await fetch("https://api.erp4dentist.com/sendotp", {
+    const gallaboxRes = await fetch("https://api.erp4dentist.com/api/sendotp", {
       method: "POST",
       body: sendOtpFormData
     });
@@ -85,9 +85,11 @@ const SignUp = ({ show, handleClose }) => {
 
     const gallaboxResult = await gallaboxRes.json();
 
+    console.log("Gallabox Response:", gallaboxResult); // Debug log
 
 
-    if (gallaboxResult.status === "success") {
+
+    if (gallaboxResult.status === true) {
       toast.success("OTP Sent via WhatsApp");
       document.getElementById("send").style.display = "none";
       document.getElementById("asideinput").style.display = "flex";
@@ -130,7 +132,7 @@ const SignUp = ({ show, handleClose }) => {
     const formData = new FormData(form);
 
     try {
-      const response = await fetch("https://api.erp4dentist.com/registertrial", {
+      const response = await fetch("https://api.erp4dentist.com/api/registertrial", {
         method: "POST",
         body: formData,
       });
